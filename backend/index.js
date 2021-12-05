@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import loginRouter from './api/index.js';
+import {loginRouter} from './api/index.js';
 // Start up an instance of app
 const PORT = process.env.PORT || 5000
 const app = express();
