@@ -17,3 +17,20 @@ module.exports.create_item = async (req, res) => {
         res.status(500).send(e.message);
     }
 }
+
+
+module.exports.get_item = async(req, res) => {
+    // find a single item by its `id`
+    try {
+        let itemData = await Item.findOne({
+            where: {id: req.params.id},
+        })
+        if (!itemData) {
+            res.status(404).json({message: "item not found."});
+            return;
+        }
+        res.json(itemData)
+    }catch(e){
+        console.log(e)
+    }
+};
