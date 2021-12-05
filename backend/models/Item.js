@@ -1,21 +1,22 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require("./db")
+const {User} = require("./user");
 
 
-module.exports.User = sequelize.define("User", {
-        first_name: {
+let Item = sequelize.define("Item", {
+        title: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        last_name: {
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        image: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        user_name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
+        description: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -25,9 +26,8 @@ module.exports.User = sequelize.define("User", {
             allowNull: false,
             autoIncrement: true,
         },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        }
+    }, {underscored: true});
+    //return User;
 
-    });
+Item.belongsTo(User);
+module.exports.Item = Item;

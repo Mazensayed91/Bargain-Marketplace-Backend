@@ -1,24 +1,19 @@
-const Model = require('../../models')
-const {User} = Model.User
-
-const mysql = require('mysql');
+const {User} = require('../../models')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 process.env.SECRET_KEY = 'secret'
 
-exports.register = (req, res) => {
+module.exports.register = async (req, res) => {
     const today = new Date();
     const userData = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         user_name: req.body.user_name,
         email: req.body.email,
-        //unique_id: req.body.unique_id,
         password: req.body.password,
         passwordconf: req.body.passwordconf,
         created: today
-
     }
     User.findOne({
         where: {
@@ -29,21 +24,22 @@ exports.register = (req, res) => {
             bcrypt.hash(req.body.password, 10, (err,hash) => {
                 userData.password = hash
                  User.create(userData).then( user => {
-                    res.json({status: user.email +'registered'})
+                    res.json({msg: user.email +' registered'})
                 }).catch(err => {
-                    res.send('error: '+ err)
+                    res.status(500).json({msg: err.message})
                 })
             })
         }
         else
-            res.json({error: user.email+"User already exist"})
+            res.status(400).json({msg: user.email+"User already exist"})
     }).catch(err => {
-        res.send('error: '+ err)
+        console.log(err)
+        res.status(500).json({msg: err.message})
     })
 };
 
 
-exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
     User.findOne({
         where: {
             email: req.body.email
@@ -66,7 +62,7 @@ exports.login = (req, res) => {
     })
 };
 
-exports.main = (req, res) => {
-    const user = await User.findAll();
-    res.json(user);
-};
+// module.exports.main = async (req, res) => {
+//     const user = await User.findAll();
+//     res.json(user);
+// };

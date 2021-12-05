@@ -1,2 +1,2 @@
 // one api router to role them all
-module.exports.loginRouter = require("./Authnticate/routes");
+module.exports.AuthRouter = require("./Authnticate/routes");
