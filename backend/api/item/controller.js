@@ -1,5 +1,4 @@
 const {User, Item} = require("../../models");
-
 const secret = process.env.SECRET_KEY || 'secret';
 
 module.exports.create_item = async (req, res) => {
@@ -11,10 +10,10 @@ module.exports.create_item = async (req, res) => {
             price: req.body.price,
             user_id: req.body.user_id,
         });
-        res.json({"msg": "item created"});
+        res.status(201).json({"msg": "item created"})
     }catch(e) {
         console.log(e);
-        res.status(500).send(e.message);
+        res.status(409).json({message: e.message})
     }
 }
 
@@ -56,7 +55,7 @@ module.exports.edit_item = async(req, res) => {
         products.upsert(updatedProduct)
             .then(() => res.sendStatus(204))
     } catch (e) {
-        console.log(e)
+        res.status(404).json({message: e.message})
     }
 };
 
@@ -76,7 +75,7 @@ module.exports.delete_item = async(req, res) => {
         res.json({ message: 'item deleted successfully.' });
     } catch (e) {
         console.log(e);
-        res.status(500).json(e);
+        res.status(409).json(e);
     }
 };
 
@@ -86,10 +85,21 @@ module.exports.get_all_items = async (req, res) => {
 
     try {
         let items = await Item.findAll();
-        res.json(items)
+        res.status(200).json(items)
 
     }catch(e){
         console.log(e)
-        res.status(500).json(e);
+        res.status(404).json(e);
+    }
+}
+
+module.exports.get_all_users = async (req, res) => {
+
+    try {
+        let users = await User.findAll();
+        res.status(200).json(users)
+    }catch(e){
+        console.log(e)
+        res.status(404).json({message: e.message})
     }
 }

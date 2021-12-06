@@ -1,6 +1,6 @@
 const sequelize = require("./db");
 const {User} = require("./user");
-const {Item} = require("./Item");
+const {Item} = require("./item");
 const CartItem = require("./cartItem");
 const db = {User, CartItem, Item};
 
