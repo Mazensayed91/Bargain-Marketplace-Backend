@@ -35,6 +35,7 @@ module.exports.get_item = async(req, res) => {
     }
 };
 
+
 module.exports.edit_item = async(req, res) => {
     // edit a single item by its `id`
     try {
@@ -56,5 +57,25 @@ module.exports.edit_item = async(req, res) => {
             .then(() => res.sendStatus(204))
     } catch (e) {
         console.log(e)
+    }
+};
+
+module.exports.delete_item = async(req, res) => {
+    // delete a single item by its `id`
+    try {
+
+        let deletedProduct = await Item.destroy({
+            where: {id: req.params.id}
+        })
+
+        if (!deletedProduct) {
+            res.status(404).json({message: "item doesn't exist!"});
+            return;
+        }
+
+        res.json({ message: 'item deleted successfully.' });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json(e);
     }
 };

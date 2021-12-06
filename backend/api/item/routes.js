@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {get_item, edit_item, create_item} = require("../")
+const {get_item, edit_item, create_item, delete_item} = require("../")
 
 
 router.get('/:id', async (req, res) => {
@@ -12,4 +12,8 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     await edit_item(req, res)
+})
+
+router.delete('/:id', async (req, res) => {
+    await delete_item(req, res)
 })
