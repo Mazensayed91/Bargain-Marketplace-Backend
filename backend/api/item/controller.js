@@ -79,3 +79,17 @@ module.exports.delete_item = async(req, res) => {
         res.status(500).json(e);
     }
 };
+
+
+
+module.exports.get_all_items = async (req, res) => {
+
+    try {
+        let items = await Item.findAll();
+        res.json(items)
+
+    }catch(e){
+        console.log(e)
+        res.status(500).json(e);
+    }
+}
