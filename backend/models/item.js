@@ -1,19 +1,20 @@
 module.exports = (sequelize, DataTypes, config) => {
-  console.log("User: ");
-  console.log(config);
   sequelize.define(
-    "User",
+    "Item",
     {
-      first_name: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      last_name: {
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      image: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-
-      email: {
+      description: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -23,14 +24,14 @@ module.exports = (sequelize, DataTypes, config) => {
         allowNull: false,
         autoIncrement: true,
       },
-      password: {
+      user_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
     },
     {
       schema: config.database,
-      tableName: "User",
+      tableName: "Item",
     }
   );
 };
