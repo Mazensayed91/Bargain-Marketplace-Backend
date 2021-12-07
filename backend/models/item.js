@@ -1,9 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require("./db")
-const {User} = require("./user");
-
-
-let Item = sequelize.define("Item", {
+module.exports = (sequelize, DataTypes, config) => {
+    sequelize.define("Item", {
         title: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -26,8 +22,12 @@ let Item = sequelize.define("Item", {
             allowNull: false,
             autoIncrement: true,
         },
-    }, {underscored: true});
-    //return User;
-
-Item.belongsTo(User);
-module.exports.Item = Item;
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
+    }, {
+        schema: config.database,
+        tableName: "Item"
+    });
+}

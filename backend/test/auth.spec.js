@@ -1,45 +1,54 @@
 const request = require("supertest");
-const { app, db } = require("../app");
+const app = require("../app");
+const { sequelize1, sequelize2, User, Item, CartItem } = require("../models")
 
 
-describe("Test the root path", () => {
+describe("Test Auth", () => {
     let rqst;
     beforeAll((done) => {
-        db.sequelize.sync().then(() => {
-            done();
-        });
-        rqst = request(app);
-        done()
+        Promise.all([sequelize1.sync(), sequelize2.sync()])
+            .then(() => {
+                rqst = request(app);
+                done();
+            }).catch(e => {
+                console.log(e);
+                done();
+            });
+        // rqst = request(app);
+        // done()
     })
 
-    afterAll(done => {
-        db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
-        .then(() => {
-            return db.sequelize.sync({ force: true });
-        })
-        .then(() => {
-            return db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
-        })
-        .then(() => {
-            return db.Item.destroy({
-                where: {},
-                truncate: true
-              })
+    afterEach((done) => {
+        sequelize2.query('SET FOREIGN_KEY_CHECKS = 0').then(() => {
+            return sequelize1.query('SET FOREIGN_KEY_CHECKS = 0');
         }).then(() => {
-            return db.User.destroy({
-                where: {},
-                truncate: true
-              })
+            return sequelize2.truncate({ cascade: true });
         }).then(() => {
-            console.log("dropped")
+            return sequelize1.truncate({ cascade: true });
+        }).then(() => {
+            return sequelize2.sync({force: true});
+        }).then(() => {
+            return sequelize1.sync({force: true});
+        }).then(() => {
+            console.log("synced");
         }).catch(e => {
-            console.log(e)
+            console.log(e);
         }).finally(() => {
-            db.sequelize.close();
-            done()
-        });
-
+            done();
+        })
     })
+
+    afterAll((done) => {
+        sequelize1.close().then(() => {
+            return sequelize2.close();
+        }).then(() => {
+            done()
+        }).catch(e => {
+            console.log(e);
+            done();
+        })
+    })
+
     test("It should response the GET method", done => {
         rqst
             .get("/")
@@ -60,16 +69,72 @@ describe("Test the root path", () => {
                 password: "password",
                 passwordconf: "password",
             })
-            // expect(res.statusCode).toBe(200);
-            expect(res.body.msg).toBe(`email registered`)
+        // expect(res.statusCode).toBe(200);
+        expect(res.body.msg).toBe(`email registered`)
     });
-    
+
     test("login", async () => {
         let res = await rqst.post("/auth/login")
             .send({
                 email: "email",
                 password: "password",
             });
-            expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(400);
     });
+
+    test("test get all items", async () => {
+        await User.create({
+            first_name: "name",
+            last_name: "name",
+            user_name: "name",
+            email: "name",
+            id: 1,
+            password: "somesupersecrethashedpassword"
+        });
+
+        await Item.create({
+            title: "title",
+            image: "image",
+            description: "discription",
+            user_id: 1,
+            id: 1,
+            price: 100
+        });
+
+        await sequelize1.sync();
+        await sequelize2.sync();
+
+        let res = await rqst.get("/items");
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(1);
+
+    })
+
+    test("distribution", async () => {
+        await User.create({
+            first_name: "name",
+            last_name: "name",
+            user_name: "name",
+            email: "name",
+            id: 1,
+            password: "somesupersecrethashedpassword"
+        });
+
+        await Item.create({
+            title: "title",
+            image: "image",
+            description: "discription",
+            user_id: 1,
+            id: 1,
+            price: 100
+        });
+
+        await sequelize1.sync();
+        await sequelize2.sync();
+
+        let retrieved = await Item.findAll({where: {user_id: 1}, include: [User], raw: true, nest: true});
+        console.log(retrieved)
+        expect(retrieved.length).toBe(1);
+        expect(retrieved[0].User.email).toBe("name")
+    })
 });

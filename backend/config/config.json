@@ -1,23 +1,50 @@
 {
-  "development": {
-    "username": "root",
-    "password": "rootroot",
-    "database": "User",
-    "host": "localhost",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": "rootroot",
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": "rootroot",
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
+  "development": [
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "dev1",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "dev2",
+      "host": "localhost",
+      "dialect": "mysql"
+    }
+  ],
+  "test": [
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "test1",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "test2",
+      "host": "localhost",
+      "dialect": "mysql"
+    }
+  ],
+  "production": [
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "prod1",
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    {
+      "username": "root",
+      "password": "rootroot",
+      "database": "prod2",
+      "host": "localhost",
+      "dialect": "mysql"
+    }
+  ]
 }

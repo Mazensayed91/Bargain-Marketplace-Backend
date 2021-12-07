@@ -1,25 +1,22 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require("./db")
-const {User} = require("./user");
-const {Item} = require("./item");
 
-
-let CartItem = sequelize.define('CartItem', {
+module.exports = (sequelize, DataTypes, config) => {
+    sequelize.define('CartItem', {
         // Model attributes are defined here
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+        },
+        item_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }, {
-        classMethods: {
-            associate(models) {
-                // relationships
-            },
-        },
-});
-
-CartItem.belongsTo(User);
-CartItem.belongsTo(Item);
-
-module.exports.CartItem = CartItem;
+        schema: config.database,
+        tableName: "CartItem"
+    });
+}
