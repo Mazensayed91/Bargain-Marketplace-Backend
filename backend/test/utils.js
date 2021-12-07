@@ -5,9 +5,11 @@ function distroy(connection, done, next){
     }).catch(e => {
         console.log(e)
     }).finally(() => {
-        if(next) distroy(next, done);
-        else done();
+        db.close();
+        if(other) {
+            this.distroy(other, done)
+        }else{
+            done()
+        }
     });
 }
-
-module.exports.distroy = distroy;
