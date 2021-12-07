@@ -33,6 +33,23 @@ module.exports.get_item = async (req, res) => {
   }
 };
 
+module.exports.get_all_items_by_user = async (req, res) => {
+  // find a single item by its `id`
+  try {
+    console.log(req.params);
+    let itemData = await Item.findAll({
+      where: { user_id: req.params.id },
+    });
+    if (!itemData) {
+      res.status(404).json({ message: "item not found." });
+      return;
+    }
+    res.json(itemData);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
   try {

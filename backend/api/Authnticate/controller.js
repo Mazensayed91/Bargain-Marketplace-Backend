@@ -23,9 +23,14 @@ module.exports.register = async (req, res) => {
       if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash;
+
           User.create(userData)
             .then((user) => {
-              res.json({ msg: user.email + " registered" });
+              let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
+                expiresIn: 1440,
+              });
+              //res.json({msg: user.email +' registered'})
+              res.json({ token: token });
             })
             .catch((err) => {
               res.status(500).json({ msg: err.message });
