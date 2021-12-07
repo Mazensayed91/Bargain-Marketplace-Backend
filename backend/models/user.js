@@ -1,8 +1,7 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require("./db")
-
-
-module.exports.User = sequelize.define("User", {
+module.exports = (sequelize, DataTypes, config) => {
+    console.log("User: ")
+    console.log(config);
+    sequelize.define("User", {
         first_name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -29,5 +28,10 @@ module.exports.User = sequelize.define("User", {
             type: DataTypes.STRING,
             allowNull: false,
         }
-
+    }, {
+        schema: config.database,
+        tableName: "User"
     });
+}
+
+

@@ -2,11 +2,11 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const {AuthRouter} = require("./api/index");
+const {AuthRouter, ItemsRouter} = require("./api/index");
 // Start up an instance of app
 
 const app = express();
-const db = require('./models');//------
+// const db = require('./models');//------
 //const loginRouter = require('./api/index') ///-----
 
 
@@ -19,11 +19,11 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: false }));
 app.use(bodyParser.json({limit: "30mb", extended: true}));
 app.use(express.json());
 app.use("/auth", AuthRouter); //----------
-
+app.use("/items", ItemsRouter)
 // Routes
 app.get("/", (req, res) => {
     res.send("Hello to dist project api")
 })
 
-module.exports.db = db;
-module.exports.app = app;
+// module.exports.db = db;
+module.exports = app;
