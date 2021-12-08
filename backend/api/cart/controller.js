@@ -1,4 +1,4 @@
-const { CartItem } = require("../../models")
+const { CartItem, Item } = require("../../models")
 
 exports.addToCart = async (req, res) => {
     try{
@@ -19,7 +19,7 @@ exports.removeFromCart = (req, res) => {
 
 exports.getUserCart = async (req, res) => {
     try{
-        const cart_items = await CartItem.findAll({where: {user_id: req.params.user_id}})
+        const cart_items = await CartItem.findAll({where: {user_id: req.params.user_id}, include: [Item]})
         return res.json({cart: cart_items})
     }catch(e) {
         return res.status(500).json({error: e.message})
