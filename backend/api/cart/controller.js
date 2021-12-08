@@ -17,6 +17,11 @@ exports.removeFromCart = (req, res) => {
 
 };
 
-exports.getUserCart = (req, res) => {
-
+exports.getUserCart = async (req, res) => {
+    try{
+        const cart_items = await CartItem.findAll({where: {user_id: req.params.user_id}})
+        return res.json({cart: cart_items})
+    }catch(e) {
+        return res.status(500).json({error: e.message})
+    }
 };
