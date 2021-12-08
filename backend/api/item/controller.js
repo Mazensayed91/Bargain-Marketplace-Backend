@@ -1,9 +1,21 @@
 const { User, Item } = require("../../models");
 const secret = process.env.SECRET_KEY || "secret";
+const stripe = require("stripe")(
+  "sk_test_51Inxf4BrsfYSR7wdtjdbggnBwqkcJIff40VxhFzSxaJXo9RDQyUBPtC503pRpU3kjrR4xLUXXGhtD6NwBFkClFXc00jzzyIUZM"
+);
 
 module.exports.create_item = async (req, res) => {
   try {
+    const product = await stripe.products.create({
+      name: req.body.title
+    })
+    const price = await stripe.prices.create({
+      product: product.id,
+      unit_amount: req.body.price,
+      currency: 'egp',
+    })
     await Item.create({
+      price_id: price.id,
       title: req.body.title,
       image: req.body.image,
       description: req.body.description,

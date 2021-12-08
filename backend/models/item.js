@@ -2,6 +2,10 @@ module.exports = (sequelize, DataTypes, config) => {
   sequelize.define(
     "Item",
     {
+      price_id: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
