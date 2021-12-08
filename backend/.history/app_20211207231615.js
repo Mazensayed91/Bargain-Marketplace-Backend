@@ -2,13 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const {
-  AuthRouter,
-  ItemsRouter,
-  UsersRouter,
-  Payment,
-} = require("./api/index");
-
+const { AuthRouter, ItemsRouter, UsersRouter } = require("./api/index");
 // Start up an instance of app
 
 const app = express();
@@ -26,7 +20,6 @@ app.use(express.json());
 app.use("/auth", AuthRouter); //----------
 app.use("/items", ItemsRouter);
 app.use("/users", UsersRouter);
-app.use("/", Payment);
 // Routes
 app.get("/", (req, res) => {
   res.send("Hello to dist project api");

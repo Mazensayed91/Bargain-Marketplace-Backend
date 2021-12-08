@@ -2,13 +2,11 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const {
-  AuthRouter,
-  ItemsRouter,
-  UsersRouter,
-  Payment,
-} = require("./api/index");
-
+const { AuthRouter, ItemsRouter, UsersRouter } = require("./api/index");
+const stripe = require("stripe")(
+  "sk_test_51Inxf4BrsfYSR7wdtjdbggnBwqkcJIff40VxhFzSxaJXo9RDQyUBPtC503pRpU3kjrR4xLUXXGhtD6NwBFkClFXc00jzzyIUZM"
+);
+const Payment = require("./api/Payment");
 // Start up an instance of app
 
 const app = express();
