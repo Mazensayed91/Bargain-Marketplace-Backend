@@ -3,7 +3,7 @@ const { CartItem } = require("../../models")
 exports.addToCart = async (req, res) => {
     try{
         const cart_item = await CartItem.create({
-            user_id: req.user.user_id,
+            user_id: req.body.user_id,
             item_id: req.body.item_id,
         });
 
