@@ -7,6 +7,7 @@ const {
   ItemsRouter,
   UsersRouter,
   Payment,
+  Cart
 } = require("./api/index");
 
 // Start up an instance of app
@@ -27,6 +28,7 @@ app.use("/auth", AuthRouter); //----------
 app.use("/items", ItemsRouter);
 app.use("/users", UsersRouter);
 app.use("/", Payment);
+app.use("/cart", Cart);
 // Routes
 app.get("/", (req, res) => {
   res.send("Hello to dist project api");
