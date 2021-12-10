@@ -51,9 +51,9 @@ module.exports.login = async (req, res) => {
     },
   })
     .then((user) => {
-      console.log(req.body.password);
+      console.log(user.password);
       if (user) {
-        if (bcrypt.compare(req.body.password, user.password)) {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
           console.log("Login");
           let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
             expiresIn: 1440,

@@ -3,19 +3,14 @@ const stripe = require("stripe")(
 );
 
 module.exports.payment = async (req, res) => {
-  let products = req.body.products;
   const session = await stripe.checkout.sessions.create({
-    line_items: products.map((product) => ({
-      price: product.price,
-      quantity: product.quantity,
-    })),
-    //  [
-    //   {
-    //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-    //     price: "price_1Inxj8BrsfYSR7wdz6gPaAEK",
-    //     quantity: 1,
-    //   },
-    // ]
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: "price_1Inxj8BrsfYSR7wdz6gPaAEK",
+        quantity: 1,
+      },
+    ],
     mode: "payment",
     success_url: `http://localhost:3000/?success=true`,
     cancel_url: `http://localhost:3000/?canceled=true`,

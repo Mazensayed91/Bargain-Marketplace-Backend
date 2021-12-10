@@ -88,20 +88,21 @@ module.exports.edit_item = async (req, res) => {
 module.exports.delete_item = async (req, res) => {
   // delete a single item by its `id`
   try {
-    let deletedItemsIDS = req.body.a;
+    let set = req.body;
+    console.log(set);
+    res.send("hey");
+    // for (n of set) {
+    //   let deletedProduct = await Item.destroy({
+    //     where: { id: n },
+    //   });
 
-    for (n of deletedItemsIDS) {
-      let deletedProduct = await Item.destroy({
-        where: { id: n },
-      });
+    //   if (!deletedProduct) {
+    //     res.status(404).json({ message: `item ${n} doesn't exist!` });
+    //     return;
+    //   }
+    // }
 
-      if (!deletedProduct) {
-        res.status(404).json({ message: `item ${n} doesn't exist!` });
-        return;
-      }
-    }
-
-    res.json({ message: "item deleted successfully." });
+    // res.json({ message: "item deleted successfully." });
   } catch (e) {
     console.log(e);
     res.status(409).json(e);

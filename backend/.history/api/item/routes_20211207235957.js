@@ -14,7 +14,7 @@ router.post("/", create_item);
 
 router.put("/:id", edit_item);
 
-router.delete("/delete", delete_item);
+router.delete("/:id", delete_item);
 
 router.get("/user/:id", get_all_items_by_user);
 

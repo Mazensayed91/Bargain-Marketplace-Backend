@@ -35,7 +35,7 @@ sequelize2.models.Item.hasMany(sequelize2.models.CartItem, {
 sequelize2.models.CartItem.belongsTo(sequelize2.models.Item, {
   foreignKey: "item_id",
 });
-sequelize2.models.CartItem.belongsTo(sequelize1.models.User, {
+sequelize2.models.CartItem.belongsToMany(sequelize1.models.User, {
   foreignKey: "user_id",
 });
 sequelize1.models.User.hasMany(sequelize2.models.CartItem, {

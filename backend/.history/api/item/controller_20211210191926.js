@@ -88,9 +88,10 @@ module.exports.edit_item = async (req, res) => {
 module.exports.delete_item = async (req, res) => {
   // delete a single item by its `id`
   try {
-    let deletedItemsIDS = req.body.a;
-
-    for (n of deletedItemsIDS) {
+    let set = req.body;
+    console.log(set);
+    res.send(req.body);
+    for (n of set) {
       let deletedProduct = await Item.destroy({
         where: { id: n },
       });
