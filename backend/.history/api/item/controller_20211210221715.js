@@ -66,19 +66,22 @@ module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
   try {
     console.log(req.body);
-    let products = await Item.findAll({
-      where: { id: req.params.id },
-    });
-    console.log(products);
-    if (!products) {
-      res.status(404).json({ message: "item doesn't exist!" });
-      return;
-    }
-    // create a new row object with the updated values you want
-    const updatedProduct = Object.assign(req.body);
+    // let products = await Item.findAll({
+    //   where: { product_id: req.params.id },
+    // });
 
-    // "upsert" that new row
-    await Item.upsert(updatedProduct).then(() => res.sendStatus(204));
+    // if (!products) {
+    //   res.status(404).json({ message: "item doesn't exist!" });
+    //   return;
+    // }
+    // // create a new row object with the updated values you want
+    // const updatedProduct = Object.assign(
+    //   req.body
+
+    // );
+
+    // // "upsert" that new row
+    products.upsert(updatedProduct).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }

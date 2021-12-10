@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes, config) => {
     {
       price_id: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING,
