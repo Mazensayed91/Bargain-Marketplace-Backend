@@ -3,7 +3,7 @@ const secret = process.env.SECRET_KEY || "secret";
 const stripe = require("stripe")(
   "sk_test_51Inxf4BrsfYSR7wdtjdbggnBwqkcJIff40VxhFzSxaJXo9RDQyUBPtC503pRpU3kjrR4xLUXXGhtD6NwBFkClFXc00jzzyIUZM"
 );
-
+const { Op } = require("sequelize");
 module.exports.create_item = async (req, res) => {
   try {
     const product = await stripe.products.create({
@@ -109,7 +109,10 @@ module.exports.delete_item = async (req, res) => {
 
 module.exports.get_all_items = async (req, res) => {
   try {
-    let items = await Item.findAll({ include: [User] });
+    let items = await Item.findAll({
+      where: { quantity: { [Op.gt]: 0 } },
+      include: [User],
+    });
     res.status(200).json(items);
   } catch (e) {
     console.log(e);

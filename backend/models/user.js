@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes, config) => {
-
   sequelize.define(
     "User",
     {
@@ -25,6 +24,11 @@ module.exports = (sequelize, DataTypes, config) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      balance: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: 0,
       },
     },
     {
