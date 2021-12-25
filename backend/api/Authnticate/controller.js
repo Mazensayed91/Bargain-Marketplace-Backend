@@ -37,7 +37,6 @@ module.exports.register = async (req, res) => {
             .catch((err) => {
               res.status(500).json({ msg: err.message });
             });
-        });
       } else res.status(400).json({ msg: user.email + "User already exist" });
     })
     .catch((err) => {
@@ -61,8 +60,7 @@ module.exports.login = async (req, res) => {
                 })
                 res.json({"token":token})
             }
-        }
-      } else res.status(400).json({ error: "User does not exist" });
+        } else res.status(400).json({ error: "User does not exist" });
     })
     .catch((err) => {
       res.status(400).json({ error: err });
