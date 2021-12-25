@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes, config) => {
         allowNull: false,
         autoIncrement: true,
       },
+        balance: {
+            type: DataTypes.INTEGER,
+        },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
