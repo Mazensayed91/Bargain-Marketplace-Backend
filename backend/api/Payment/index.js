@@ -1,29 +1,35 @@
-const { Item, User } = require("../../models");
+const { Item, User, CartItem } = require("../../models");
 const sequelize = require("sequelize");
 const stripe = require("stripe")(
   "sk_test_51Inxf4BrsfYSR7wdtjdbggnBwqkcJIff40VxhFzSxaJXo9RDQyUBPtC503pRpU3kjrR4xLUXXGhtD6NwBFkClFXc00jzzyIUZM"
 );
 
 module.exports.payment = async (req, res) => {
-  let products = req.body.products;
-  const session = await stripe.checkout.sessions.create({
-    line_items: products.map((product) => ({
-      price: product.price,
-      quantity: product.quantity,
-    })),
-    //  [
-    //   {
-    //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-    //     price: "price_1Inxj8BrsfYSR7wdz6gPaAEK",
-    //     quantity: 1,
-    //   },
-    // ]
-    mode: "payment",
-    success_url: `http://localhost:3000/?success=true`,
-    cancel_url: `http://localhost:3000/?canceled=true`,
-  });
+  try {
+    let products = req.body.products;
+    console.log(products);
+    const session = await stripe.checkout.sessions.create({
+      line_items: products.map((product) => ({
+        price: product.price_id,
+        quantity: product.quantity,
+      })),
+      //  [
+      //   {
+      //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+      //     price: "price_1Inxj8BrsfYSR7wdz6gPaAEK",
+      //     quantity: 1,
+      //   },
+      // ]
+      mode: "payment",
+      success_url: `http://localhost:3000/?success=true`,
+      cancel_url: `http://localhost:3000/?canceled=true`,
+    });
+    console.log(session);
 
-  res.redirect(303, session.url);
+    res.json({ url: session.url });
+  } catch (e) {
+    res.send(e.message);
+  }
 };
 
 module.exports.checkout = async (req, res) => {
@@ -36,18 +42,23 @@ module.exports.checkout = async (req, res) => {
    */
 
   // Model.update({ field: sequelize.literal('field + 2') }, { where: { id: model_id } });
-  try{
+  try {
     let overall = 0;
+    console.log(req.body);
     for (let cart_item of req.body.items) {
       let item = await Item.findOne({ where: { id: cart_item.item_id } });
       let price = item.price * cart_item.quantity;
       overall += price;
       let seller = await User.findOne({ where: { id: cart_item.seller_id } });
-      await seller.update({ balance: seller.balance - price });
+      await seller.update({ balance: seller.balance + price });
     }
-    await User.update({ balance: sequelize.literal(`balance - ${overall}`) }, { where: { id: req.body.items[0].buyer_id } })
-    res.json({"message": "does"});
-  }catch(e) {
-    res.status(500).json({'error': e.message});
+    await User.update(
+      { balance: sequelize.literal(`balance - ${overall}`) },
+      { where: { id: req.body.items[0].buyer_id } }
+    );
+    await CartItem.destroy({ where: { user_id: req.body.items[0].buyer_id } });
+    res.json({ message: "does" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
-}
+};
