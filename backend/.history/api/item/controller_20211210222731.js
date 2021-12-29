@@ -67,7 +67,7 @@ module.exports.edit_item = async (req, res) => {
   try {
     console.log(req.body);
     let products = await Item.findAll({
-      where: { id: req.params.id },
+      where: { product_id: req.params.id },
     });
     console.log(products);
     if (!products) {
@@ -78,7 +78,7 @@ module.exports.edit_item = async (req, res) => {
     const updatedProduct = Object.assign(req.body);
 
     // "upsert" that new row
-    await Item.upsert(updatedProduct).then(() => res.sendStatus(204));
+    products.upsert(updatedProduct).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }

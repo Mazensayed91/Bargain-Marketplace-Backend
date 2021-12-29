@@ -8,13 +8,12 @@ const {
   get_all_items_by_user,
 } = require("./controller");
 
+router.delete("/delete", delete_item);
 router.get("/:id", get_item);
 
 router.post("/", create_item);
 
 router.put("/:id", edit_item);
-
-router.delete("/delete", delete_item);
 
 router.get("/user/:id", get_all_items_by_user);
 

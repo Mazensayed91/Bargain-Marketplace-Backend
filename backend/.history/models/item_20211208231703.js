@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes, config) => {
     {
       price_id: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING,
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes, config) => {
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       description: {
         type: DataTypes.STRING,
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes, config) => {
         autoIncrement: true,
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

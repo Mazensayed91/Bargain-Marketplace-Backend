@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes, config) => {
-  console.log("User: ");
-  console.log(config);
+
   sequelize.define(
     "User",
     {
@@ -23,6 +22,9 @@ module.exports = (sequelize, DataTypes, config) => {
         allowNull: false,
         autoIncrement: true,
       },
+        balance: {
+            type: DataTypes.INTEGER,
+        },
       password: {
         type: DataTypes.STRING,
         allowNull: false,

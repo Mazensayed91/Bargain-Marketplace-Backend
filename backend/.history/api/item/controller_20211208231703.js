@@ -7,13 +7,13 @@ const stripe = require("stripe")(
 module.exports.create_item = async (req, res) => {
   try {
     const product = await stripe.products.create({
-      name: req.body.title,
-    });
+      name: req.body.title
+    })
     const price = await stripe.prices.create({
       product: product.id,
       unit_amount: req.body.price,
-      currency: "egp",
-    });
+      currency: 'egp',
+    })
     await Item.create({
       price_id: price.id,
       title: req.body.title,
@@ -65,20 +65,21 @@ module.exports.get_all_items_by_user = async (req, res) => {
 module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
   try {
-    console.log(req.body);
     let products = await Item.findAll({
-      where: { id: req.params.id },
+      where: { product_id: req.params.id },
     });
-    console.log(products);
+
     if (!products) {
       res.status(404).json({ message: "item doesn't exist!" });
       return;
     }
     // create a new row object with the updated values you want
-    const updatedProduct = Object.assign(req.body);
+    const updatedProduct = Object.assign({}, req.body, {
+      item: req.body.item,
+    });
 
     // "upsert" that new row
-    await Item.upsert(updatedProduct).then(() => res.sendStatus(204));
+    products.upsert(updatedProduct).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
@@ -87,17 +88,13 @@ module.exports.edit_item = async (req, res) => {
 module.exports.delete_item = async (req, res) => {
   // delete a single item by its `id`
   try {
-    let deletedItemsIDS = req.body.a;
+    let deletedProduct = await Item.destroy({
+      where: { id: req.params.id },
+    });
 
-    for (n of deletedItemsIDS) {
-      let deletedProduct = await Item.destroy({
-        where: { id: n },
-      });
-
-      if (!deletedProduct) {
-        res.status(404).json({ message: `item ${n} doesn't exist!` });
-        return;
-      }
+    if (!deletedProduct) {
+      res.status(404).json({ message: "item doesn't exist!" });
+      return;
     }
 
     res.json({ message: "item deleted successfully." });

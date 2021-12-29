@@ -1,24 +1,18 @@
 module.exports = (sequelize, DataTypes, config) => {
+
   sequelize.define(
-    "Item",
+    "User",
     {
-      price_id: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      title: {
+      first_name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      price: {
-        type: DataTypes.FLOAT,
+      last_name: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      image: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      description: {
+
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -28,14 +22,14 @@ module.exports = (sequelize, DataTypes, config) => {
         allowNull: false,
         autoIncrement: true,
       },
-      user_id: {
-        type: DataTypes.INTEGER,
+      password: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },
     {
       schema: config.database,
-      tableName: "Item",
+      tableName: "User",
     }
   );
 };

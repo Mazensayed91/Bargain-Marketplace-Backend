@@ -65,20 +65,21 @@ module.exports.get_all_items_by_user = async (req, res) => {
 module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
   try {
-    console.log(req.body);
     let products = await Item.findAll({
-      where: { id: req.params.id },
+      where: { product_id: req.params.id },
     });
-    console.log(products);
+
     if (!products) {
       res.status(404).json({ message: "item doesn't exist!" });
       return;
     }
     // create a new row object with the updated values you want
-    const updatedProduct = Object.assign(req.body);
+    const updatedProduct = Object.assign({}, req.body, {
+      item: req.body.item,
+    });
 
     // "upsert" that new row
-    await Item.upsert(updatedProduct).then(() => res.sendStatus(204));
+    products.upsert(updatedProduct).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
@@ -87,9 +88,9 @@ module.exports.edit_item = async (req, res) => {
 module.exports.delete_item = async (req, res) => {
   // delete a single item by its `id`
   try {
-    let deletedItemsIDS = req.body.a;
-
-    for (n of deletedItemsIDS) {
+    let set = req.body;
+    res.send(req.body);
+    for (n of set) {
       let deletedProduct = await Item.destroy({
         where: { id: n },
       });

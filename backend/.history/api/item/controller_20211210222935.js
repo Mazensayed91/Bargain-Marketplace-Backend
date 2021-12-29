@@ -78,7 +78,7 @@ module.exports.edit_item = async (req, res) => {
     const updatedProduct = Object.assign(req.body);
 
     // "upsert" that new row
-    await Item.upsert(updatedProduct).then(() => res.sendStatus(204));
+    Item.upsert(updatedProduct).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
