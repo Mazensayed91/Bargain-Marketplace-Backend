@@ -3,7 +3,7 @@ const { User } = require("../../models");
 module.exports.deposit = async (req, res) => {
   try {
     console.log(req.body);
-    let user = await User.findAll({
+    let user = await User.findOne({
       where: { id: req.body.id },
     });
     if (!user) {
@@ -11,10 +11,10 @@ module.exports.deposit = async (req, res) => {
       return;
     }
     // create a new row object with the updated values you want
-    const updatedUser = { ...user, balance: req.body.balance };
+    const updatedUser = { balance: req.body.balance };
 
     // "upsert" that new row
-    await User.upsert(updatedUser).then(() => res.sendStatus(204));
+    await user.update(updatedUser).then(() => res.sendStatus(204));
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
