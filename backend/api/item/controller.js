@@ -64,26 +64,30 @@ module.exports.get_all_items_by_user = async (req, res) => {
 module.exports.get_all_items_by_user_and_owners_items = async (req, res) => {
   try {
     let hydrated_user = await User.findOne({
-      where: { id: req.body.user_id }, include: [{
-        model: User,
-        as: "owner",
-        include: [Item]
-      },
-        Item
-      ]
+      where: { id: req.params.id },
+      include: [
+        {
+          model: User,
+          as: "owner",
+          include: [{ model: Item }],
+        },
+        { model: Item },
+      ],
     });
-    let all_items = hydrated_user.items;
-    for(let owner of hydrated_user.owner){
-      if(owner.Items && owner.Items.length) {
-        all_items += owner.Items;
+
+    let all_items = hydrated_user.Items;
+    for (let owner of hydrated_user.owner) {
+      if (owner.Items && owner.Items.length) {
+        all_items.push(...owner.Items);
       }
     }
+    console.log(all_items);
     res.json(all_items);
   } catch (e) {
+    res.status(500).send(e.message);
     console.log(e);
   }
 };
-
 
 module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
