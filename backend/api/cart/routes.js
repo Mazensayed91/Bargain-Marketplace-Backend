@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post("/add", addToCart);
 router.get("/:user_id", getUserCart);
-router.delete("/:item_id", removeFromCart);
+router.delete("/", removeFromCart);
 
 module.exports = router;
