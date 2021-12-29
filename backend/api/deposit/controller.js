@@ -11,7 +11,7 @@ module.exports.deposit = async (req, res) => {
       return;
     }
     // create a new row object with the updated values you want
-    const updatedUser = { balance: req.body.balance };
+    const updatedUser = { balance: req.body.balance + user.balance };
 
     // "upsert" that new row
     await user.update(updatedUser).then(() => res.sendStatus(204));
