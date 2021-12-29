@@ -9,7 +9,6 @@ const {
   Payment,
   Cart
 } = require("./api/index");
-
 // Start up an instance of app
 
 const app = express();

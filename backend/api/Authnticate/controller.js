@@ -12,6 +12,7 @@ module.exports.register = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     passwordconf: req.body.passwordconf,
+    balance: 0,
     created: today,
   };
   User.findOne({
@@ -26,9 +27,7 @@ module.exports.register = async (req, res) => {
 
           User.create(userData)
             .then((user) => {
-              let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-                expiresIn: 1440,
-              });
+              let token = jwt.sign(user.dataValues, process.env.SECRET_KEY);
               //res.json({msg: user.email +' registered'})
               res.json({ token: token });
             })
@@ -55,9 +54,7 @@ module.exports.login = async (req, res) => {
       if (user) {
         if (bcrypt.compare(req.body.password, user.password)) {
           console.log("Login");
-          let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-            expiresIn: 1440,
-          });
+          let token = jwt.sign(user.dataValues, process.env.SECRET_KEY);
           res.json({ token });
         }
       } else res.status(400).json({ error: "User does not exist" });

@@ -42,6 +42,9 @@ sequelize1.models.User.hasMany(sequelize2.models.CartItem, {
   foreignKey: "user_id",
 });
 
+sequelize1.models.User.belongsToMany(sequelize1.models.User, {as: "owner", through: "vendor_seller", foreignKey: "owner_id"})
+sequelize1.models.User.belongsToMany(sequelize1.models.User, {as: "vendor", through: "vendor_seller", foreignKey: "vendor_id"})
+
 module.exports.User = sequelize1.models.User;
 module.exports.Item = sequelize2.models.Item;
 module.exports.CartItem = sequelize2.models.CartItem;

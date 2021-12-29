@@ -64,7 +64,6 @@ describe("Test Auth", () => {
             .send({
                 first_name: "first_name",
                 last_name: "last_name",
-                user_name: "user_name",
                 email: "email",
                 password: "password",
                 passwordconf: "password",
@@ -86,8 +85,8 @@ describe("Test Auth", () => {
         await User.create({
             first_name: "name",
             last_name: "name",
-            user_name: "name",
             email: "name",
+            balance: 0,
             id: 1,
             password: "somesupersecrethashedpassword"
         });
@@ -97,6 +96,7 @@ describe("Test Auth", () => {
             image: "image",
             description: "discription",
             user_id: 1,
+            quantity: 4,
             id: 1,
             price: 100
         });

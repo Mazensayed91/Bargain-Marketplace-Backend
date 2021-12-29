@@ -46,7 +46,6 @@ module.exports.get_item = async (req, res) => {
 };
 
 module.exports.get_all_items_by_user = async (req, res) => {
-  // find a single item by its `id`
   try {
     console.log(req.params);
     let itemData = await Item.findAll({
@@ -61,6 +60,30 @@ module.exports.get_all_items_by_user = async (req, res) => {
     console.log(e);
   }
 };
+
+module.exports.get_all_items_by_user_and_owners_items = async (req, res) => {
+  try {
+    let hydrated_user = await User.findOne({
+      where: { id: req.body.user_id }, include: [{
+        model: User,
+        as: "owner",
+        include: [Item]
+      },
+        Item
+      ]
+    });
+    let all_items = hydrated_user.items;
+    for(let owner of hydrated_user.owner){
+      if(owner.Items && owner.Items.length) {
+        all_items += owner.Items;
+      }
+    }
+    res.json(all_items);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 module.exports.edit_item = async (req, res) => {
   // edit a single item by its `id`
