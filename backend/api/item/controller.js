@@ -21,6 +21,7 @@ module.exports.create_item = async (req, res) => {
       description: req.body.description,
       price: req.body.price,
       user_id: req.body.user_id,
+      quantity: req.body.quantity
     });
     res.status(201).json({ msg: "item created" });
   } catch (e) {
