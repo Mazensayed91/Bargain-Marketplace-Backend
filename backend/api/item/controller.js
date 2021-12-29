@@ -3,7 +3,7 @@ const secret = process.env.SECRET_KEY || "secret";
 const stripe = require("stripe")(
   "sk_test_51Inxf4BrsfYSR7wdtjdbggnBwqkcJIff40VxhFzSxaJXo9RDQyUBPtC503pRpU3kjrR4xLUXXGhtD6NwBFkClFXc00jzzyIUZM"
 );
-
+const { Op } = require("sequelize");
 module.exports.create_item = async (req, res) => {
   try {
     const product = await stripe.products.create({
@@ -46,7 +46,6 @@ module.exports.get_item = async (req, res) => {
 };
 
 module.exports.get_all_items_by_user = async (req, res) => {
-  // find a single item by its `id`
   try {
     console.log(req.params);
     let itemData = await Item.findAll({
@@ -58,6 +57,34 @@ module.exports.get_all_items_by_user = async (req, res) => {
     }
     res.json(itemData);
   } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports.get_all_items_by_user_and_owners_items = async (req, res) => {
+  try {
+    let hydrated_user = await User.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: User,
+          as: "owner",
+          include: [{ model: Item }],
+        },
+        { model: Item },
+      ],
+    });
+
+    let all_items = hydrated_user.Items;
+    for (let owner of hydrated_user.owner) {
+      if (owner.Items && owner.Items.length) {
+        all_items.push(...owner.Items);
+      }
+    }
+    console.log(all_items);
+    res.json(all_items);
+  } catch (e) {
+    res.status(500).send(e.message);
     console.log(e);
   }
 };
@@ -109,7 +136,10 @@ module.exports.delete_item = async (req, res) => {
 
 module.exports.get_all_items = async (req, res) => {
   try {
-    let items = await Item.findAll({ include: [User] });
+    let items = await Item.findAll({
+      where: { quantity: { [Op.gt]: 0 } },
+      include: [User],
+    });
     res.status(200).json(items);
   } catch (e) {
     console.log(e);
