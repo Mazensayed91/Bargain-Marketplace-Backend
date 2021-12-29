@@ -11,7 +11,7 @@ module.exports.create_item = async (req, res) => {
     });
     const price = await stripe.prices.create({
       product: product.id,
-      unit_amount: req.body.price,
+      unit_amount: req.body.price * 100,
       currency: "egp",
     });
     await Item.create({
