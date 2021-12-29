@@ -15,7 +15,10 @@ exports.addToCart = async (req, res) => {
 
 exports.removeFromCart = async (req, res) => {
     try{
-        await CartItem.destroy({where: {id: req.body.id}})
+        // await CartItem.destroy({where: {id: req.body.id}});
+        let cart_item = await CartItem.findOne({where: {id: req.body.id}, include: [Item]});
+        await cart_item.Item.update({quantity: cart_item.Item.quantity + 1});
+        await cart_item.destroy();
         return res.json({message: "Item removed from cart"})
     }catch(e){
         return res.status(500).json({error: e.message})
